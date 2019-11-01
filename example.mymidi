@@ -1,0 +1,50 @@
+# This example shows how to create a source file for the music parser.
+# Single line comments are introduced with #
+# Multiple line comments are C style (/* .... */).
+
+# There must be only one tempo instruction at the beginning of the file
+# The two numbers are multiplied together give the number of 1/8 beats per minute.
+tempo = (80, 8)
+
+# Start with defining a set of instruments to play the notes following.  Each
+# instrument is assigned to a different midi channel.  Instruments can be defined by 
+# name (see INSTRUMENTS.txt) or midi number.
+# The syntax of this command is:
+#       instrument = (instrument-name | instrument-number), octave:(-2|-1|0|1|2), volume:(0-127)
+# where octave and volume are optional and can appear in any order.
+
+instrument = Acoustic Grand Piano, octave:0           # ch=0, id=1
+instrument = Orchestral Harp, octave:-1               # ch=1, id=2
+instrument = Pad 2 (warm), octave:0                   # ch=2, id=3
+instrument = FX 7 (echoes), octave:0, volume:100      # ch=3, id=4
+instrument = 22, octave:0	                          # ch=4, id=5
+instrument = 22, octave:1	                          # ch=5, id=6
+
+# Next comes the notes to play.
+# <1,2,5>       indicates that instrument id=1, id=2 and id=5 (Acoustic Grand Piano, Pad 2 (warm) and 22) play the notes.
+#               if the < ... > clause is omitted then all instruments play the notes.
+#
+# [4]           represents 4 beats
+#
+#               notes are relative to middle C, but offset by the octave specified in the instrument clause.
+# 0 5 7         represent middle C + octave + 0, 5 and 7 notes.
+# -             represents a rest
+
+/* verse 1 */
+<1,2,5>			[4] 0 5 7 [6] 0 [2] -							
+<3,4,5>			[4] -1 2 5 [2] 0 [4] -1 [8] -					
+
+# The above set of instruments and notes can be repeated as below if you want instruments to play
+# a different set of notes (as per drums).  Note that percussion has to play on channel 9 (instrument 10)
+# hence the dummy channels (6 to 8).
+
+/********************************************** DRUMS **********************************************/
+
+instrument = 1, volume:0	  			# dummy ch=6, id=7     
+instrument = 1, volume:0	  			# dummy ch=7, id=8	       
+instrument = 1, volume:0	  			# dummy ch=8, id=9	       
+instrument = 1, octave:-3	       	  	# percussion ch=9, id=10
+ 				
+<10>		[4] 11 11 11 [6] 13 [2] -
+<10>		[4] 11 11 11 [2] 11 [4] 13 [8] -
+
